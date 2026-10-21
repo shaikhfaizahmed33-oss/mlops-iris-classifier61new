@@ -1,0 +1,56 @@
+schema: '2.0'
+stages:
+  collect:
+    cmd: python src/pipeline/collect.py --output data/raw/iris_raw.csv
+    outs:
+    - path: data/raw/iris_raw.csv
+      hash: md5
+      md5: 31c7062cf4ad87a8e4cb1a57f4bc759d
+      size: 8992
+  preprocess:
+    cmd: python src/pipeline/preprocess.py --input data/raw/iris_raw.csv 
+      --output data/processed/iris_preprocessed.csv
+    deps:
+    - path: data/raw/iris_raw.csv
+      hash: md5
+      md5: 31c7062cf4ad87a8e4cb1a57f4bc759d
+      size: 8992
+    - path: src/pipeline/preprocess.py
+      hash: md5
+      md5: 604b6d564eda649e796e6095e9ed42fe
+      size: 1409
+    outs:
+    - path: data/processed/iris_preprocessed.csv
+      hash: md5
+      md5: a14ddf816aea4f7a003d1f974d3aaef1
+      size: 4002
+  features:
+    cmd: python src/pipeline/features.py --input 
+      data/processed/iris_preprocessed.csv --output 
+      data/processed/iris_features.csv
+    deps:
+    - path: data/processed/iris_preprocessed.csv
+      hash: md5
+      md5: a14ddf816aea4f7a003d1f974d3aaef1
+      size: 4002
+    - path: src/pipeline/features.py
+      hash: md5
+      md5: cd46441632478194c1d8f4a1d572953d
+      size: 1125
+    outs:
+    - path: data/processed/iris_features.csv
+      hash: md5
+      md5: 0e0705fa15985fa70f9354a8213a9a15
+      size: 10448
+  validate:
+    cmd: python src/pipeline/validate.py --input 
+      data/processed/iris_features.csv
+    deps:
+    - path: data/processed/iris_features.csv
+      hash: md5
+      md5: 0e0705fa15985fa70f9354a8213a9a15
+      size: 10448
+    - path: src/pipeline/validate.py
+      hash: md5
+      md5: eb501c004bec4662d187ba467ba6df93
+      size: 2084
